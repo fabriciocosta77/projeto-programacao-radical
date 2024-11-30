@@ -3,134 +3,81 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gerar Roadmap</title>
+  <title>Ajuda ao Professor</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    #sideNav {
-      height: 100vh;
-      position: fixed;
-      top: 0;
-      left: 0;
-      background-color: #343a40;
-      color: white;
-      width: 250px;
-      transform: translateX(-100%);
-      transition: transform 0.3s ease-in-out;
-      z-index: 1045;
-    }
-    #sideNav.active {
-      transform: translateX(0);
-    }
-    #sideNav .nav-link {
-      color: white;
-    }
-    #sideNav .nav-link:hover {
-      color: #007bff;
-    }
-    #mainContent {
-      margin-left: 0;
-      transition: margin-left 0.3s ease-in-out;
-    }
-    #mainContent.shifted {
-      margin-left: 250px;
-    }
-    #headerNavbar {
-      background-color: #007bff;
-      color: white;
-      padding: 0.5rem 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    #headerNavbar img {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      border: 2px solid white;
-      object-fit: cover;
-    }
-    #headerNavbar a {
-      text-decoration: none;
-      color: white;
-      font-weight: bold;
-    }
-    #headerNavbar a:hover {
-      text-decoration: underline;
-    }
-  </style>
 </head>
 <body>
-  <!-- Side Navigation Bar -->
-  <div id="sideNav" class="d-flex flex-column">
-    <div class="p-3 bg-dark">
-      <h5 class="text-white">Menu</h5>
-    </div>
-    <ul class="nav flex-column p-3">
-      <li class="nav-item">
-        <a class="nav-link" href="index.html">Página Inicial</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Exercícios de Fixação</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Revisão</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Apoio ao Professor</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Seu Sistema</a>
-      </li>
-    </ul>
-  </div>
+  <!-- Header Navbar -->
+  <header class="navbar navbar-dark bg-dark p-3">
+    <button id="toggleMenu" class="btn btn-light">☰ Menu</button>
+    <h1 class="text-white ms-3">Ajuda ao Professor</h1>
+  </header>
 
-  <!-- Main Content -->
-  <div id="mainContent" class="container-fluid p-0">
-    <!-- Header Navbar -->
-    <header id="headerNavbar">
-      <button id="toggleButton" class="btn btn-light">☰ Menu</button>
-      <a href="perfil-aluno.html" class="d-flex align-items-center">
-        <img src="https://via.placeholder.com/40" alt="Foto de Perfil" class="me-2">
-        João da Silva
-      </a>
-    </header>
-
-    <!-- Content Section -->
-    <div class="container mt-4">
-      <h3>Gerar Roadmap</h3>
-      <div class="mt-4">
-        <div class="mb-3">
-          <h5>Matéria</h5>
-          <input type="text" class="form-control" placeholder="Digite sua matéria">
-        </div>
-        <div class="mb-3">
-          <h5>Tópico</h5>
-          <input type="text" class="form-control" placeholder="Qual tópico deseja abordar">
-        </div>
-        <div class="mb-3">
-          <h5>Passos</h5>
-          <textarea class="form-control" rows="3" placeholder="Quais passos devo seguir"></textarea>
-        </div>
-        <div class="mb-3">
-          <h5>Turma</h5>
-          <input type="text" class="form-control" placeholder="Insira suas turmas">
-        </div>
-        <button class="btn btn-danger w-100">Gerar Roadmap</button>
+  <div class="container mt-4">
+    <h3>Gerar Roadmap</h3>
+    <form id="roadmapForm" class="mt-4">
+      <div class="mb-3">
+        <label for="materia" class="form-label">Matéria</label>
+        <input type="text" id="materia" class="form-control" placeholder="Digite sua matéria" required>
       </div>
+      <div class="mb-3">
+        <label for="topico" class="form-label">Tópico</label>
+        <input type="text" id="topico" class="form-control" placeholder="Qual tópico deseja abordar" required>
+      </div>
+      <div class="mb-3">
+        <label for="passos" class="form-label">Passos</label>
+        <textarea id="passos" class="form-control" rows="3" placeholder="Quais passos devo seguir" required></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="turma" class="form-label">Turma</label>
+        <input type="text" id="turma" class="form-control" placeholder="Insira suas turmas" required>
+      </div>
+      <button type="button" id="generateRoadmap" class="btn btn-danger w-100">Gerar Roadmap</button>
+    </form>
+
+    <div id="roadmapResult" class="mt-4 d-none">
+      <h4>Roadmap Gerado</h4>
+      <pre id="roadmapContent"></pre>
     </div>
   </div>
 
   <script>
-    const sideNav = document.getElementById('sideNav');
-    const toggleButton = document.getElementById('toggleButton');
-    const mainContent = document.getElementById('mainContent');
+    document.getElementById('generateRoadmap').addEventListener('click', async () => {
+      const materia = document.getElementById('materia').value;
+      const topico = document.getElementById('topico').value;
+      const passos = document.getElementById('passos').value;
+      const turma = document.getElementById('turma').value;
 
-    toggleButton.addEventListener('click', () => {
-      sideNav.classList.toggle('active');
-      mainContent.classList.toggle('shifted');
+      // Coleta dados via API
+      const apiResponse = await fetch('http://localhost:3001/alunos-disciplina');
+      const alunosData = await apiResponse.json();
+
+      // Cria a mensagem para o ChatGPT
+      const message = `
+        Baseado nos seguintes campos:
+        - Matéria: ${materia}
+        - Tópico: ${topico}
+        - Passos: ${passos}
+        - Turma: ${turma}
+        
+        Use os dados a seguir: ${JSON.stringify(alunosData)} para gerar um roadmap de ensino claro e detalhado.`;
+
+      // Envia para o ChatGPT
+      const chatGPTResponse = await fetch('http://localhost:3001/chatgpt', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message }),
+      });
+
+      const roadmap = await chatGPTResponse.json();
+      console.log(roadmap)
+      // Exibe o resultado
+      const roadmapContainer = document.getElementById('roadmapResult');
+      document.getElementById('roadmapContent').textContent = roadmap.response.content;
+      roadmapContainer.classList.remove('d-none');
     });
   </script>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
