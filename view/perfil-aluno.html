@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfil do Aluno</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    #sideNav {
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: #343a40;
+      color: white;
+      width: 250px;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease-in-out;
+      z-index: 1045;
+    }
+    #sideNav.active {
+      transform: translateX(0);
+    }
+    #sideNav .nav-link {
+      color: white;
+    }
+    #sideNav .nav-link:hover {
+      color: #007bff;
+    }
+    #mainContent {
+      margin-left: 0;
+      transition: margin-left 0.3s ease-in-out;
+    }
+    #mainContent.shifted {
+      margin-left: 250px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Side Navigation Bar -->
+  <div id="sideNav" class="d-flex flex-column">
+    <div class="p-3 bg-dark">
+      <h5 class="text-white">Menu</h5>
+    </div>
+    <ul class="nav flex-column p-3">
+      <li class="nav-item">
+        <a class="nav-link" href="index.html">Página inicial</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Exercícios de Fixação</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Revisão</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="apoio-ao-professor.html">Apoio ao Professor</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Seu Sistema</a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div id="mainContent" class="container-fluid p-0">
+    <!-- Toggle Button -->
+    <button id="toggleButton" class="btn btn-dark m-3">☰ Menu</button>
+
+    <!-- Profile Header -->
+    <header id="profileHeader" class="text-center text-white" style="background-color: #007bff; padding: 2rem 0;">
+      <img src="https://via.placeholder.com/150" alt="Foto de Perfil" class="rounded-circle" style="width: 150px; height: 150px; border: 5px solid white; object-fit: cover;">
+      <h2 class="mt-3">João da Silva</h2>
+      <p>Aluno</p>
+    </header>
+
+    <!-- General Details Section -->
+    <div class="container mt-4">
+      <div class="card">
+        <div class="card-body">
+          <h3>Detalhes Gerais</h3>
+          <p><strong>Nome completo:</strong> João da Silva</p>
+          <p><strong>CPF:</strong> 123.456.789-00</p>
+          <p><strong>E-mail:</strong> joao.silva@email.com</p>
+          <p><strong>Telefone:</strong> (11) 98765-4321</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Learning Style Section -->
+    <div class="container mt-4">
+      <div class="card">
+        <div class="card-body">
+          <h3>Estilo de Aprendizado</h3>
+          <p>O estilo predominante de aprendizado do aluno é:</p>
+          <button id="mainStyleButton" class="btn btn-primary btn-lg w-100 mb-3" data-bs-toggle="modal" data-bs-target="#learningStyleModal">
+            <strong>Acomodador</strong><br>
+            Aprende melhor por meio de experiências concretas e observação ativa.
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Learning Styles -->
+  <div class="modal fade" id="learningStyleModal" tabindex="-1" aria-labelledby="learningStyleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="learningStyleModalLabel">Estilos de Aprendizado</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Escolha um dos estilos abaixo para alterar o estilo predominante:</p>
+          <button class="btn btn-outline-primary btn-lg w-100 mb-3" onclick="changeLearningStyle('Convergente', 'Prefere soluções práticas baseadas em conceitos abstratos.')">
+            <strong>Convergente</strong><br>
+            Prefere soluções práticas baseadas em conceitos abstratos.
+          </button>
+          <button class="btn btn-outline-primary btn-lg w-100 mb-3" onclick="changeLearningStyle('Divergente', 'Aprende por meio de ideias criativas e múltiplas perspectivas.')">
+            <strong>Divergente</strong><br>
+            Aprende por meio de ideias criativas e múltiplas perspectivas.
+          </button>
+          <button class="btn btn-outline-primary btn-lg w-100 mb-3" onclick="changeLearningStyle('Assimilador', 'Foca em lógica e ideias organizadas para aprender.')">
+            <strong>Assimilador</strong><br>
+            Foca em lógica e ideias organizadas para aprender.
+          </button>
+          <button class="btn btn-outline-primary btn-lg w-100" onclick="changeLearningStyle('Acomodador', 'Foca em aulas práticas para melhor absorção de conteúdo.')">
+            <strong>Acomodador</strong><br>
+            Foca em aulas práticas para melhor absorção de conteúdo.
+          </button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const sideNav = document.getElementById('sideNav');
+    const toggleButton = document.getElementById('toggleButton');
+    const mainContent = document.getElementById('mainContent');
+
+    toggleButton.addEventListener('click', () => {
+      sideNav.classList.toggle('active');
+      mainContent.classList.toggle('shifted');
+    });
+
+    // Altera o estilo de aprendizado principal
+    function changeLearningStyle(style, description) {
+      const mainButton = document.getElementById('mainStyleButton');
+      mainButton.innerHTML = `<strong>${style}</strong><br>${description}`;
+      const modal = bootstrap.Modal.getInstance(document.getElementById('learningStyleModal'));
+      modal.hide(); // Fecha o modal após a seleção
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
